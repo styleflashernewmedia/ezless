@@ -192,6 +192,7 @@ class ezLessOperator{
         $ini        = eZINI::instance( 'ezless.ini' );
         $compileMethod  = trim( $ini->variable( 'ezlessconfig', 'CompileMethod'  ) );
         $executable  = trim( $ini->variable( 'ezlessconfig', 'Executable'  ) );
+        $executableDir  = trim( $ini->variable( 'ezlessconfig', 'ExecutableDir'  ) );
         $useOneFile = $ini->variable( 'ezlessconfig','useOneFile' );
 
         // ToDo: siteaccess as parameter
@@ -315,6 +316,11 @@ class ezLessOperator{
             $sys = eZSys::instance();
 
             $path = $sys->cacheDirectory() . '/public/stylesheets';
+            
+            //this is needed if the executable is not inside your PATH variable
+            $savedLibPath = getenv("PATH");
+            if ($savedLibPath) { $executableDir .= ":$savedLibPath"; }
+            putenv("PATH=$executableDir");
 
             $packerLevel = $this->getPackerLevel();
 
@@ -343,8 +349,11 @@ class ezLessOperator{
                 $file = $path . '/' . $file;
 
                 $command=$executable." ".$match['path']." $file";
+                //set path variable if lessc is not in PATH
+
                 $output=shell_exec($command);
                 eZDebug::writeDebug($command,'command');
+                eZDebug::writeDebug($output,'output');
 
                 $content = file_get_contents($file );
 
