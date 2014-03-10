@@ -154,7 +154,7 @@ class ezLessOperator{
 	 * @return null
 	 */
 	public function addFiles($files){
-		if( is_array( $files ) )
+	    if( is_array( $files ) )
 			foreach( $files as $file )
 				self::$files[] = $file;
 		else
@@ -316,6 +316,10 @@ class ezLessOperator{
             $sys = eZSys::instance();
 
             $path = $sys->cacheDirectory() . '/public/stylesheets';
+            if ( !is_dir( $path ) )
+            {
+                mkdir( $path, 0777,true );
+            }
             
             //this is needed if the executable is not inside your PATH variable
             $savedLibPath = getenv("PATH");
@@ -328,21 +332,18 @@ class ezLessOperator{
             {
                 $less->importDir[] = $base . DIRECTORY_SEPARATOR . 'stylesheets';
             }
-
             $importContent = "";
             $importCss = "";
             if( count( self::$imports ) > 0 ){
                 foreach( self::$imports as $import ){
                     $match = eZTemplateDesignResource::fileMatch( $bases, '', 'stylesheets/'.$import, $importsTried );
-
                     $importCss = file_get_contents( $match['path'] );
                     $importContent .= $importCss;
                 }
             }
 
             foreach( $files as $file){
-
-
+                
                 $match = eZTemplateDesignResource::fileMatch( $bases, '', 'stylesheets/'.$file, $triedFiles );
                 
                 $file = substr( $file, 0, -4 ).'css'; // we wan't to know what's the name of the less file on the browser
