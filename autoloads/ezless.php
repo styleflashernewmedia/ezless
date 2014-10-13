@@ -322,9 +322,9 @@ class ezLessOperator{
             }
             
             //this is needed if the executable is not inside your PATH variable
-            $savedLibPath = getenv("PATH");
-            if ($savedLibPath) { $executableDir .= ":$savedLibPath"; }
-            putenv("PATH=$executableDir");
+            $newPath = $executableDir;
+            if ($savedLibPath) { $newPath .= ":$savedLibPath"; }
+            putenv("PATH=$newPath");
 
             $packerLevel = $this->getPackerLevel();
 
@@ -349,7 +349,7 @@ class ezLessOperator{
                 $file = substr( $file, 0, -4 ).'css'; // we wan't to know what's the name of the less file on the browser
                 $file = $path . '/' . $file;
 
-                $command=$executable." ".$match['path']." $file";
+                $command = $executableDir."/".$executable." ".$match['path']." $file";
                 //set path variable if lessc is not in PATH
 
                 $output=shell_exec($command);
