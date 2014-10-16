@@ -26,165 +26,165 @@ class ezLessOperator{
 
 
     /**
-	 * $Operators
-	 * @access private
-	 * @type array
-	 */
-	private $Operators;
+     * $Operators
+     * @access private
+     * @type array
+     */
+    private $Operators;
 
 
-	/**
-	 * $files
-	 * @access static
-	 * @type array
-	 */
-	static $files = array();
+    /**
+     * $files
+     * @access static
+     * @type array
+     */
+    static $files = array();
 
-	/**
-	 * $imports
-	 * @access static
-	 * @type array
-	 */
-	static $imports = array();
+    /**
+     * $imports
+     * @access static
+     * @type array
+     */
+    static $imports = array();
 
-	/**
-	 * eZ Template Operator Constructor
-	 * @return null
-	 */
-	function __construct(){
-		$this->Operators = array( 'ezless', 'ezless_add', 'ezless_imports' );
-	}
-
-
-	/**
-	 * operatorList
-	 * @access public
-	 * @return array
-	 */
-	function &operatorList(){
-		return $this->Operators;
-	}
-
-	/**
-	 * namedParameterPerOperator
-	 * @return true
-	 */
-	function namedParameterPerOperator(){
-		return true;
-	}
+    /**
+     * eZ Template Operator Constructor
+     * @return null
+     */
+    function __construct(){
+        $this->Operators = array( 'ezless', 'ezless_add', 'ezless_imports' );
+    }
 
 
-	/**
-	 * namedParameterList
-	 * @return array
-	 */
-	function namedParameterList(){
-		return array(   'ezless' => array(),
-			            'ezless_add' => array(),
-                        'ezless_imports' => array()
-				    );
-	}
+    /**
+     * operatorList
+     * @access public
+     * @return array
+     */
+    function &operatorList(){
+        return $this->Operators;
+    }
+
+    /**
+     * namedParameterPerOperator
+     * @return true
+     */
+    function namedParameterPerOperator(){
+        return true;
+    }
 
 
-	/**
-	 * modify
-	 * @param $tpl
-	 * @param $operatorName
-	 * @param $operatorParameters
-	 * @param $rootNamespace
-	 * @param $currentNamespace
-	 * @param & $operatorValue
-	 * @param $namedParameters
-	 * @return null
-	 */
-	function modify( $tpl, $operatorName, $operatorParameters, $rootNamespace,
-									$currentNamespace, &$operatorValue, $namedParameters ){
-
-		switch ( $operatorName ){
-			case 'ezless':
-				$operatorValue = $this->loadFiles( $operatorValue );
-				break;
-			case 'ezless_add':
-				$operatorValue = $this->addFiles( $operatorValue );
-				break;
-			case 'ezless_imports':
-				$operatorValue = $this->registerImports( $operatorValue );
-				break;
-		}
-
-	}
+    /**
+     * namedParameterList
+     * @return array
+     */
+    function namedParameterList(){
+        return array(   'ezless' => array(),
+            'ezless_add' => array(),
+            'ezless_imports' => array()
+        );
+    }
 
 
-	/**
-	 * loadFiles
-	 * @param array $files
-	 * @return string $html generated html tags
-	 */
-	public function loadFiles( $files ){
-	    $pageLayoutFiles = array();
-		$afiles = (array)$files;
+    /**
+     * modify
+     * @param $tpl
+     * @param $operatorName
+     * @param $operatorParameters
+     * @param $rootNamespace
+     * @param $currentNamespace
+     * @param & $operatorValue
+     * @param $namedParameters
+     * @return null
+     */
+    function modify( $tpl, $operatorName, $operatorParameters, $rootNamespace,
+        $currentNamespace, &$operatorValue, $namedParameters ){
 
-		if( count( $afiles ) > 0 ){
-			foreach( $afiles as $file ){
-				$pageLayoutFiles[] = $file;
-			}
-		}
+            switch ( $operatorName ){
+            case 'ezless':
+                $operatorValue = $this->loadFiles( $operatorValue );
+                break;
+            case 'ezless_add':
+                $operatorValue = $this->addFiles( $operatorValue );
+                break;
+            case 'ezless_imports':
+                $operatorValue = $this->registerImports( $operatorValue );
+                break;
+            }
 
-		$files = $this->prependArray( self::$files, $pageLayoutFiles );
-
-		return $this->generateTag( $files );
-	}
-
-	/**
-	 * registerImports
-	 * @param array|string $files
-	 * @return null
-	 */
-	public function registerImports( $files ){
-		if( is_array( $files ) )
-			foreach( $files as $file )
-				self::$imports[] = $file;
-		else
-			self::$imports[] = $files;
-	}
-
-	/**
-	 * addFiles
-	 * @param array|string $files
-	 * @return null
-	 */
-	public function addFiles($files){
-	    if( is_array( $files ) )
-			foreach( $files as $file )
-				self::$files[] = $file;
-		else
-			self::$files[] = $files;
-
-	}
-
-	/**
-	 * prependArray
-	 * @description prepends the $prepend array in front of $array
-	 * @param array $array
-	 * @param array $prepend
-	 * @return array $return
-	 */
-	private function prependArray( $array, $prepend ){
-		$return = $prepend;
-
-		foreach( $array as $value)
-			$return[] = $value;
-
-		return $return;
-	}
+        }
 
 
-	/**
-	 * generateTag
-	 * @param array $files
-	 * @return string $html
-	 */
-	private function generateTag( $files ){
+    /**
+     * loadFiles
+     * @param array $files
+     * @return string $html generated html tags
+     */
+    public function loadFiles( $files ){
+        $pageLayoutFiles = array();
+        $afiles = (array)$files;
+
+        if( count( $afiles ) > 0 ){
+            foreach( $afiles as $file ){
+                $pageLayoutFiles[] = $file;
+            }
+        }
+
+        $files = $this->prependArray( self::$files, $pageLayoutFiles );
+
+        return $this->generateTag( $files );
+    }
+
+    /**
+     * registerImports
+     * @param array|string $files
+     * @return null
+     */
+    public function registerImports( $files ){
+        if( is_array( $files ) )
+            foreach( $files as $file )
+                self::$imports[] = $file;
+        else
+            self::$imports[] = $files;
+    }
+
+    /**
+     * addFiles
+     * @param array|string $files
+     * @return null
+     */
+    public function addFiles($files){
+        if( is_array( $files ) )
+            foreach( $files as $file )
+                self::$files[] = $file;
+        else
+            self::$files[] = $files;
+
+    }
+
+    /**
+     * prependArray
+     * @description prepends the $prepend array in front of $array
+     * @param array $array
+     * @param array $prepend
+     * @return array $return
+     */
+    private function prependArray( $array, $prepend ){
+        $return = $prepend;
+
+        foreach( $array as $value)
+            $return[] = $value;
+
+        return $return;
+    }
+
+
+    /**
+     * generateTag
+     * @param array $files
+     * @return string $html
+     */
+    private function generateTag( $files ){
         eZDebug::writeDebug($files, 'ezLessOperator::generateTag');
 
         $html = $cssContent = '';
@@ -320,10 +320,10 @@ class ezLessOperator{
             {
                 mkdir( $path, 0777,true );
             }
-            
+
             //this is needed if the executable is not inside your PATH variable
             $newPath = $executableDir;
-            if ($savedLibPath) { $newPath .= ":$savedLibPath"; }
+            //if ($savedLibPath) { $newPath .= ":$savedLibPath"; }
             putenv("PATH=$newPath");
 
             $packerLevel = $this->getPackerLevel();
@@ -343,9 +343,9 @@ class ezLessOperator{
             }
 
             foreach( $files as $file){
-                
+
                 $match = eZTemplateDesignResource::fileMatch( $bases, '', 'stylesheets/'.$file, $triedFiles );
-                
+
                 $file = substr( $file, 0, -4 ).'css'; // we wan't to know what's the name of the less file on the browser
                 $file = $path . '/' . $file;
 
@@ -367,12 +367,12 @@ class ezLessOperator{
                     {
                         $parsedContent = $importContent.$content;
                         //    $parsedContent = $less->parse( $importContent.$content );
-                        
+
                         if( $packerLevel > 1 )
                         {
                             $parsedContent = $this->optimizeCSS( $parsedContent, $packerLevel );
                         }
-                        
+
                         $clusterFile = eZClusterFileHandler::instance( $file );
                         $clusterFile->storeContents( $parsedContent, 'ezless', 'text/css' );
                         eZURI::transformURI( $file, true );
@@ -414,18 +414,18 @@ class ezLessOperator{
         {
             eZDebug::writeError( "Unknown compile method : '{$compileMethod}'", __CLASS__ . "::" . __FUNCTION__ );
         }
-	}
+    }
 
 
-	/**
-	 * Returns packer Level as defined in ezjscore.ini
-	 * borrowed from ezjscore
-	 * @return int
-	 */
-	private function getPackerLevel()
-	{
-	    $ezjscINI = eZINI::instance( 'ezjscore.ini' );
-	    // Only pack files if Packer is enabled and if not set DevelopmentMode is disabled
+    /**
+     * Returns packer Level as defined in ezjscore.ini
+     * borrowed from ezjscore
+     * @return int
+     */
+    private function getPackerLevel()
+    {
+        $ezjscINI = eZINI::instance( 'ezjscore.ini' );
+        // Only pack files if Packer is enabled and if not set DevelopmentMode is disabled
         if ( $ezjscINI->hasVariable( 'eZJSCore', 'Packer' ) )
         {
             $packerIniValue = $ezjscINI->variable( 'eZJSCore', 'Packer' );
@@ -442,32 +442,32 @@ class ezLessOperator{
             }
             else return 3;
         }
-	}
+    }
 
-	/**
-	 * Optimizes CSS content using ezjscore
-	 * Using either INI optimzers or optimizeCSS if ezjscore is an older version
-	 * @param string $content
-	 * @param int $packerLevel
-	 * @return string
-	 */
-	private function optimizeCSS( $content, $packerLevel )
-	{
-	    $ezjscINI = eZINI::instance( 'ezjscore.ini' );
-	    if( $ezjscINI->hasVariable( 'eZJSCore', 'CssOptimizer' ) )
-	    {
+    /**
+     * Optimizes CSS content using ezjscore
+     * Using either INI optimzers or optimizeCSS if ezjscore is an older version
+     * @param string $content
+     * @param int $packerLevel
+     * @return string
+     */
+    private function optimizeCSS( $content, $packerLevel )
+    {
+        $ezjscINI = eZINI::instance( 'ezjscore.ini' );
+        if( $ezjscINI->hasVariable( 'eZJSCore', 'CssOptimizer' ) )
+        {
             foreach( $ezjscINI->variable( 'eZJSCore', 'CssOptimizer' ) as $optimizer )
             {
                 $content = call_user_func( array( $optimizer, 'optimize' ), $content, $packerLevel );
             }
-	    }
-	    elseif ( method_exists( 'ezjscPacker', 'optimizeCSS') )
-	    {
-	        $content = ezjscPacker::optimizeCSS( $content, $packerLevel );
-	    }
+        }
+        elseif ( method_exists( 'ezjscPacker', 'optimizeCSS') )
+        {
+            $content = ezjscPacker::optimizeCSS( $content, $packerLevel );
+        }
 
-	    return $content;
-	}
+        return $content;
+    }
 }
 
 ?>
