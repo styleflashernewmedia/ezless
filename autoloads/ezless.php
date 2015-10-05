@@ -349,7 +349,7 @@ class ezLessOperator{
                 $file = substr( $file, 0, -4 ).'css'; // we wan't to know what's the name of the less file on the browser
                 $file = $path . '/' . $file;
 
-                $command = $executableDir."/".$executable." ".$match['path']." $file";
+                $command = $executableDir."/".$executable." ".$match['path']." $file 2>&1";
                 //set path variable if lessc is not in PATH
 
                 $output=shell_exec($command);
