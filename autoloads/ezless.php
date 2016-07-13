@@ -324,7 +324,7 @@ class ezLessOperator{
             //this is needed if the executable is not inside your PATH variable
             $newPath = $executableDir;
             //if ($savedLibPath) { $newPath .= ":$savedLibPath"; }
-            putenv("PATH=$newPath");
+            //putenv("PATH=$newPath");
 
             $packerLevel = $this->getPackerLevel();
 
